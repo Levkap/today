@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Day Schedule</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #schedule {
+            background-color: #bbbfff; /* A light blue background */
+            padding: 20px;
+            width: 300px;
+            margin: auto;
+        }
+
+        #activities {
+            margin-bottom: 20px;
+        }
+
+        .activity {
+            background-color: #ffffff; /* White background for activities */
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff; /* A solid blue background for buttons */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="schedule">
+        <h2>Day Schedule</h2>
+        <div id="activities"></div>
+        <button id="addNew">Add New Activity</button>
+    </div>
+
+    <script>
+        document.getElementById('addNew').addEventListener('click', function() {
+            const activity = prompt("Enter new activity and time (e.g., 2pm Read)");
+            if (activity) {
+                const activitiesContainer = document.getElementById('activities');
+                const activityDiv = document.createElement('div');
+                activityDiv.classList.add('activity');
+                activityDiv.textContent = activity;
+                
+                const doneButton = document.createElement('button');
+                doneButton.textContent = 'Done';
+                doneButton.onclick = function() {
+                    activitiesContainer.removeChild(activityDiv);
+                };
+                
+                activityDiv.appendChild(doneButton);
+                activitiesContainer.appendChild(activityDiv);
+            }
+        });
+    </script>
+</body>
+</html>
