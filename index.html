@@ -11,10 +11,12 @@
         }
 
         #schedule {
-            background-color: #bbbfff; /* A light blue background */
+            background-color: #f0f8ff; /* A light blue background */
             padding: 20px;
-            width: 300px;
             margin: auto;
+            width: 100%;
+            max-width: 600px; /* Maximum width for larger screens */
+            box-sizing: border-box; /* Include padding in total width and height */
         }
 
         #activities {
@@ -39,6 +41,13 @@
             background-color: #007bff; /* A solid blue background for buttons */
             color: white;
         }
+
+        /* Responsive design for smaller devices */
+        @media (max-width: 600px) {
+            #schedule {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -49,24 +58,48 @@
     </div>
 
     <script>
+        // Function to add an activity
+        function addActivity(activity) {
+            const activitiesContainer = document.getElementById('activities');
+            const activityDiv = document.createElement('div');
+            activityDiv.classList.add('activity');
+            activityDiv.textContent = activity;
+            
+            const doneButton = document.createElement('button');
+            doneButton.textContent = 'Done';
+            doneButton.onclick = function() {
+                activitiesContainer.removeChild(activityDiv);
+                // Update local storage after removing an activity
+                saveActivitiesToLocalStorage();
+            };
+            
+            activityDiv.appendChild(doneButton);
+            activitiesContainer.appendChild(activityDiv);
+            // Update local storage after adding an activity
+            saveActivitiesToLocalStorage();
+        }
+
+        // Save activities to local storage
+        function saveActivitiesToLocalStorage() {
+            const activities = [...document.querySelectorAll('.activity')].map(activity => activity.textContent.replace('Done', '').trim());
+            localStorage.setItem('activities', JSON.stringify(activities));
+        }
+
+        // Load activities from local storage
+        function loadActivitiesFromLocalStorage() {
+            const activities = JSON.parse(localStorage.getItem('activities')) || [];
+            activities.forEach(activity => addActivity(activity));
+        }
+
         document.getElementById('addNew').addEventListener('click', function() {
             const activity = prompt("Enter new activity and time (e.g., 2pm Read)");
             if (activity) {
-                const activitiesContainer = document.getElementById('activities');
-                const activityDiv = document.createElement('div');
-                activityDiv.classList.add('activity');
-                activityDiv.textContent = activity;
-                
-                const doneButton = document.createElement('button');
-                doneButton.textContent = 'Done';
-                doneButton.onclick = function() {
-                    activitiesContainer.removeChild(activityDiv);
-                };
-                
-                activityDiv.appendChild(doneButton);
-                activitiesContainer.appendChild(activityDiv);
+                addActivity(activity);
             }
         });
+
+        // Load activities from storage on page load
+        window.onload = loadActivitiesFromLocalStorage;
     </script>
 </body>
 </html>
